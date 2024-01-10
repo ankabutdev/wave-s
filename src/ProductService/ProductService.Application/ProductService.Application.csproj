@@ -17,12 +17,9 @@
 	
   <ItemGroup>
     <Folder Include="DTOs\Companies\" />
-    <Folder Include="DTOs\Categories\" />
     <Folder Include="DTOs\Products\" />
-    <Folder Include="UseCases\Categories\Commands\CreateCategory\" />
     <Folder Include="UseCases\Categories\Commands\DeleteCategory\" />
     <Folder Include="UseCases\Categories\Commands\UpdateCategory\" />
-    <Folder Include="UseCases\Categories\Queries\GetAllCategory\" />
     <Folder Include="UseCases\Categories\Queries\GetByIdCategory\" />
     <Folder Include="UseCases\Categories\Queries\GetCategoryByProductId\" />
     <Folder Include="UseCases\Companies\Commands\CreateCompany\" />
