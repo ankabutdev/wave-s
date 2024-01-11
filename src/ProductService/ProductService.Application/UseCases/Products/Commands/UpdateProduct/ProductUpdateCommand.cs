@@ -1,6 +1,8 @@
-﻿namespace ProductService.Domain.Entities;
+﻿using MediatR;
 
-public class Product
+namespace ProductService.Application.UseCases.Products.Commands.UpdateProduct;
+
+public class ProductUpdateCommand : IRequest<bool>
 {
     public int Id { get; set; }
 
@@ -41,8 +43,4 @@ public class Product
     public string Smartpause { get; set; } = null!;
 
     public string Turbopressure { get; set; } = null!;
-
-    public virtual Category Category { get; set; } = null!;
-
-    public virtual Company Company { get; set; } = null!;
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProductService.Infastructure.Persistence;
 
-#nullable disable
+#pragma warning disable
 
 namespace ProductService.Infastructure.Migrations
 {

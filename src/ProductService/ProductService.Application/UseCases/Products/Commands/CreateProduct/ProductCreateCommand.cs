@@ -1,9 +1,9 @@
-﻿namespace ProductService.Domain.Entities;
+﻿using MediatR;
 
-public class Product
+namespace ProductService.Application.UseCases.Products.Commands.CreateProduct;
+
+public class ProductCreateCommand : IRequest<bool>
 {
-    public int Id { get; set; }
-
     public int CategoryId { get; set; }
 
     public string Name { get; set; } = null!;
@@ -14,7 +14,7 @@ public class Product
 
     public string Description { get; set; } = null!;
 
-    public int CompanyId { get; set; }
+    public long CompanyId { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
@@ -41,8 +41,4 @@ public class Product
     public string Smartpause { get; set; } = null!;
 
     public string Turbopressure { get; set; } = null!;
-
-    public virtual Category Category { get; set; } = null!;
-
-    public virtual Company Company { get; set; } = null!;
 }
