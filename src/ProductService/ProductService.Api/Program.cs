@@ -1,5 +1,6 @@
 using ProductService.Application;
 using ProductService.Infastructure;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
