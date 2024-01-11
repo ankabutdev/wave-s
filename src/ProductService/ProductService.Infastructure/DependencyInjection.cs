@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProductService.Application.Abstractions;
 using ProductService.Infastructure.Persistence;
+using System.Text.Json.Serialization;
 
 namespace ProductService.Infastructure;
 
@@ -18,6 +19,10 @@ public static class DependencyInjection
         {
             options.UseNpgsql(defaultConnection);
         });
+
+        services.AddControllersWithViews()
+            .AddJsonOptions(x => x.JsonSerializerOptions
+            .ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
         return services;
     }
