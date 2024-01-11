@@ -14,28 +14,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
 	</ItemGroup>
-	
-  <ItemGroup>
-    <Folder Include="DTOs\Companies\" />
-    <Folder Include="DTOs\Products\" />
-    <Folder Include="UseCases\Categories\Commands\DeleteCategory\" />
-    <Folder Include="UseCases\Categories\Commands\UpdateCategory\" />
-    <Folder Include="UseCases\Categories\Queries\GetByIdCategory\" />
-    <Folder Include="UseCases\Categories\Queries\GetCategoryByProductId\" />
-    <Folder Include="UseCases\Companies\Commands\CreateCompany\" />
-    <Folder Include="UseCases\Companies\Commands\DeleteCompany\" />
-    <Folder Include="UseCases\Companies\Commands\UpdateCompany\" />
-    <Folder Include="UseCases\Companies\Queries\GetAllCompany\" />
-    <Folder Include="UseCases\Companies\Queries\GetByIdCompany\" />
-    <Folder Include="UseCases\Companies\Queries\GetCompanyByProductId\" />
-    <Folder Include="UseCases\Products\Commands\CreateProduct\" />
-    <Folder Include="UseCases\Products\Commands\DeleteProduct\" />
-    <Folder Include="UseCases\Products\Commands\UpdateProduct\" />
-    <Folder Include="UseCases\Products\Queries\GetAllProduct\" />
-    <Folder Include="UseCases\Products\Queries\GetByIdProduct\" />
-    <Folder Include="UseCases\Products\Queries\GetProductByCategoryId\" />
-    <Folder Include="UseCases\Products\Queries\GetProductByCompanyId\" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ProductService.Domain\ProductService.Domain.csproj" />
