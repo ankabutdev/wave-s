@@ -1,10 +1,10 @@
 ﻿namespace ProductService.Domain.Entities;
 
-public partial class Product
+public class Product
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
 
-    public long CategoryId { get; set; }
+    public int CategoryId { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -14,7 +14,7 @@ public partial class Product
 
     public string Description { get; set; } = null!;
 
-    public long CompanyId { get; set; }
+    public int CompanyId { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

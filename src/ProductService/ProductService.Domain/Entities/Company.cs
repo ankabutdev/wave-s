@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace ProductService.Domain.Entities;
 
-namespace ProductService.Domain.Entities;
-
-public partial class Company
+public class Company
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
 
     public string Description { get; set; } = null!;
 
