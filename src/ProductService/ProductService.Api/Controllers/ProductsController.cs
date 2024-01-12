@@ -10,7 +10,7 @@ using ProductService.Application.UseCases.Products.Queries.GetByIdProduct;
 
 namespace ProductService.Api.Controllers;
 
-[Route("api/products")]
+[Route("api/products/")]
 [ApiController]
 public class ProductsController : ControllerBase
 {
