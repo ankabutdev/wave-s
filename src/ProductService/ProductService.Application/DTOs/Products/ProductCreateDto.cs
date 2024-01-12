@@ -1,4 +1,6 @@
-﻿namespace ProductService.Application.DTOs.Products;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace ProductService.Application.DTOs.Products;
 
 public class ProductCreateDto
 {
@@ -6,7 +8,7 @@ public class ProductCreateDto
 
     public string Name { get; set; } = null!;
 
-    public string ImagePaths { get; set; } = null!;
+    public IFormFile ImagePaths { get; set; } = default!;
 
     public double Price { get; set; }
 

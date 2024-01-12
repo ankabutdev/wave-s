@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.AspNetCore.Http;
+using System.Text.Json.Serialization;
 
 namespace ProductService.Application.DTOs.Products;
 
@@ -11,7 +12,7 @@ public class ProductUpdateDto
 
     public string Name { get; set; } = null!;
 
-    public string ImagePaths { get; set; } = null!;
+    public IFormFile? ImagePaths { get; set; }
 
     public double Price { get; set; }
 
