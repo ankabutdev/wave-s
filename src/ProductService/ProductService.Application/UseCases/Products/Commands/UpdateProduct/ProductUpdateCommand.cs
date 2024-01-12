@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace ProductService.Application.UseCases.Products.Commands.UpdateProduct;
 
@@ -10,7 +11,7 @@ public class ProductUpdateCommand : IRequest<bool>
 
     public string Name { get; set; } = null!;
 
-    public string ImagePaths { get; set; } = null!;
+    public IFormFile? ImagePaths { get; set; }
 
     public double Price { get; set; }
 
