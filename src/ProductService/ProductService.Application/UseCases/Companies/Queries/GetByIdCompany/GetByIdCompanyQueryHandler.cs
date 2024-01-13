@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Abstractions;
 using ProductService.Domain.Entities;
@@ -9,7 +8,7 @@ namespace ProductService.Application.UseCases.Companies.Queries.GetByIdCompany;
 public class GetByIdCompanyQueryHandler : IRequestHandler<GetByIdCompanyQuery, Company>
 {
     private readonly IAppDbContext _context;
-    
+
     public GetByIdCompanyQueryHandler(IAppDbContext context)
     {
         _context = context;
