@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Abstractions;
+using ProductService.Application.Interfaces.Files;
 
 namespace ProductService.Application.UseCases.Products.Commands.UpdateProduct;
 
@@ -9,11 +10,13 @@ public class ProductUpdateCommandHandler : IRequestHandler<ProductUpdateCommand,
 {
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IFileService _fileService;
 
-    public ProductUpdateCommandHandler(IAppDbContext context, IMapper mapper)
+    public ProductUpdateCommandHandler(IAppDbContext context, IMapper mapper, IFileService fileService)
     {
         _context = context;
         _mapper = mapper;
+        _fileService = fileService;
     }
 
     public async Task<bool> Handle(ProductUpdateCommand request, CancellationToken cancellationToken)
@@ -24,7 +27,16 @@ public class ProductUpdateCommandHandler : IRequestHandler<ProductUpdateCommand,
             .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (products is null)
-                throw new ArgumentNullException(nameof(products));
+                throw new ArgumentNullException(nameof(products)); ;
+
+            if (request.ImagePaths is not null)
+            {
+                var deleteImage = await _fileService.DeleteImageAsync(products.ImagePaths);
+
+                string newImagePath = await _fileService.UploadImageAsync(request.ImagePaths);
+
+                products.ImagePaths = newImagePath;
+            }
 
             _mapper.Map(request, products);
 

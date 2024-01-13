@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ProductService.Application.Abstractions;
+using ProductService.Application.Interfaces.Files;
 using ProductService.Domain.Entities;
 
 namespace ProductService.Application.UseCases.Products.Commands.CreateProduct;
@@ -9,11 +10,13 @@ public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand,
 {
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IFileService _fileService;
 
-    public ProductCreateCommandHandler(IAppDbContext context, IMapper mapper)
+    public ProductCreateCommandHandler(IAppDbContext context, IMapper mapper, IFileService fileService)
     {
         _context = context;
         _mapper = mapper;
+        _fileService = fileService;
     }
 
     public async Task<bool> Handle(ProductCreateCommand request, CancellationToken cancellationToken)
@@ -21,6 +24,11 @@ public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand,
         try
         {
             var entity = _mapper.Map<Product>(request);
+
+            string imagePath = await _fileService
+                .UploadImageAsync(request.ImagePaths);
+
+            entity.ImagePaths = imagePath;
 
             entity.CreatedAt = DateTime.UtcNow;
             entity.UpdatedAt = DateTime.UtcNow;

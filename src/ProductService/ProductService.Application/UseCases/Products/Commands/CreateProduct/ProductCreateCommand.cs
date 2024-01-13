@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace ProductService.Application.UseCases.Products.Commands.CreateProduct;
 
@@ -8,13 +9,13 @@ public class ProductCreateCommand : IRequest<bool>
 
     public string Name { get; set; } = null!;
 
-    public string ImagePaths { get; set; } = null!;
+    public IFormFile ImagePaths { get; set; } = null!;
 
     public double Price { get; set; }
 
     public string Description { get; set; } = null!;
 
-    public long CompanyId { get; set; }
+    public int CompanyId { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
