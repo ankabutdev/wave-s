@@ -21,7 +21,7 @@ public class OrderUpdateCommandHandler : IRequestHandler<OrderUpdateCommand, boo
         try
         {
             var categories = await _context.Orders
-            .FirstOrDefaultAsync(x => x.Id == request.Id);
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (categories is null)
                 throw new ArgumentNullException(nameof(categories));
