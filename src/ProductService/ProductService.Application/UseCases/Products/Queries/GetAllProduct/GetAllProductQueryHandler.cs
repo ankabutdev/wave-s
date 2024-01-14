@@ -19,7 +19,7 @@ public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQuery, IEn
         return await _context
             .Products
             .Include(x => x.Category)
-            .ThenInclude(y => y.Products)
+            //.ThenInclude(y => y.Products)
             .ToListAsync(cancellationToken);
     }
 }
