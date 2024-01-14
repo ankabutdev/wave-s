@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Abstractions;
 using ProductService.Application.Interfaces.Files;
+using ProductService.Domain.Entities;
+using System.Text;
 
 namespace ProductService.Application.UseCases.Products.Commands.UpdateProduct;
 
@@ -24,18 +26,16 @@ public class ProductUpdateCommandHandler : IRequestHandler<ProductUpdateCommand,
         try
         {
             var products = await _context.Products
-            .FirstOrDefaultAsync(x => x.Id == request.Id);
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (products is null)
-                throw new ArgumentNullException(nameof(products)); ;
+                throw new ArgumentNullException(nameof(products));
 
             if (request.ImagePaths is not null)
             {
-                var deleteImage = await _fileService.DeleteImageAsync(products.ImagePaths);
+                await DeleteImages(products);
 
-                string newImagePath = await _fileService.UploadImageAsync(request.ImagePaths);
-
-                products.ImagePaths = newImagePath;
+                products.ImagePaths = await UplaodImages(request);
             }
 
             _mapper.Map(request, products);
@@ -53,5 +53,26 @@ public class ProductUpdateCommandHandler : IRequestHandler<ProductUpdateCommand,
         {
             return false;
         }
+    }
+
+    private async Task DeleteImages(Product products)
+    {
+        foreach (var image in products.ImagePaths.Split("&"))
+        {
+            await _fileService.DeleteImageAsync(image);
+        }
+    }
+
+    private async Task<string> UplaodImages(ProductUpdateCommand products)
+    {
+        var imagePaths = new StringBuilder();
+
+        foreach (var image in products.ImagePaths!)
+        {
+            string imagePath = await _fileService.UploadImageAsync(image);
+            imagePaths.Append(imagePath + "&");
+        }
+
+        return imagePaths.ToString();
     }
 }

@@ -9,7 +9,7 @@ public class ProductCreateCommand : IRequest<bool>
 
     public string Name { get; set; } = null!;
 
-    public IFormFile ImagePaths { get; set; } = null!;
+    public List<IFormFile> ImagePaths { get; set; } = default!;
 
     public double Price { get; set; }
 

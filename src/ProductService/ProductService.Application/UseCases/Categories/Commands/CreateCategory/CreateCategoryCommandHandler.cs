@@ -26,7 +26,7 @@ public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComman
             entity.CreatedAt = DateTime.UtcNow;
             entity.UpdatedAt = DateTime.UtcNow;
 
-            await _context.Categories.AddAsync(entity);
+            await _context.Categories.AddAsync(entity, cancellationToken);
 
             var result = await _context
                 .SaveChangesAsync(cancellationToken);

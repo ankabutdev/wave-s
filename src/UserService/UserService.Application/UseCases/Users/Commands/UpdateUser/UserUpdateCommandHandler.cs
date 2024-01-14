@@ -21,7 +21,7 @@ public class UserUpdateCommandHandler : IRequestHandler<UserUpdateCommand, bool>
         try
         {
             var categories = await _context.Users
-            .FirstOrDefaultAsync(x => x.Id == request.Id);
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (categories is null)
                 throw new ArgumentNullException(nameof(categories));

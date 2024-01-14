@@ -3,6 +3,7 @@ using MediatR;
 using ProductService.Application.Abstractions;
 using ProductService.Application.Interfaces.Files;
 using ProductService.Domain.Entities;
+using System.Text;
 
 namespace ProductService.Application.UseCases.Products.Commands.CreateProduct;
 
@@ -25,18 +26,14 @@ public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand,
         {
             var entity = _mapper.Map<Product>(request);
 
-            string imagePath = await _fileService
-                .UploadImageAsync(request.ImagePaths);
-
-            entity.ImagePaths = imagePath;
+            await UploadImages(entity, request);
 
             entity.CreatedAt = DateTime.UtcNow;
             entity.UpdatedAt = DateTime.UtcNow;
 
             await _context.Products.AddAsync(entity, cancellationToken);
 
-            var result = await _context
-                .SaveChangesAsync(cancellationToken);
+            var result = await _context.SaveChangesAsync(cancellationToken);
 
             return result > 0;
         }
@@ -44,5 +41,17 @@ public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand,
         {
             return false;
         }
+    }
+
+    private async Task UploadImages(Product entity, ProductCreateCommand request)
+    {
+        var imagePaths = new StringBuilder();
+
+        foreach (var image in request.ImagePaths)
+        {
+            string imagePath = await _fileService.UploadImageAsync(image);
+            imagePaths.Append(imagePath + "&");
+        }
+        entity.ImagePaths = imagePaths.ToString();
     }
 }

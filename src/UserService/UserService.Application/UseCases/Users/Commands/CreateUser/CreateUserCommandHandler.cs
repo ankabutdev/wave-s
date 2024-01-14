@@ -26,7 +26,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, bool>
             entity.CreatedAt = DateTime.UtcNow;
             entity.UpdatedAt = DateTime.UtcNow;
 
-            await _context.Users.AddAsync(entity);
+            await _context.Users.AddAsync(entity, cancellationToken);
 
             var result = await _context
                 .SaveChangesAsync(cancellationToken);

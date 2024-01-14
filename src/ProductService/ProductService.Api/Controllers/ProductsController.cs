@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ProductService.Application.DTOs;
 using ProductService.Application.DTOs.Products;
 using ProductService.Application.UseCases.Products.Commands.CreateProduct;
 using ProductService.Application.UseCases.Products.Commands.DeleteProduct;
@@ -39,7 +40,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async ValueTask<IActionResult> CreateAsync(ProductCreateDto dto)
+    public async ValueTask<IActionResult> CreateAsync([FromForm] ProductCreateDto dto)
     {
         var product = _mapper.Map<ProductCreateCommand>(dto);
 
@@ -64,5 +65,12 @@ public class ProductsController : ControllerBase
             .Send(new ProductDeleteCommand() { Id = Id });
 
         return Ok(result);
+    }
+
+    [HttpPost("file")]
+    public async Task<IActionResult> Create([FromForm] FIleDto fileDto)
+    {
+        fileDto.ImagePaths.ForEach(x=> Console.WriteLine(x.FileName));
+        return Ok(fileDto.ImagePaths);
     }
 }

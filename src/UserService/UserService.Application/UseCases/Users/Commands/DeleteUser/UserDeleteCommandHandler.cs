@@ -9,7 +9,7 @@ public class UserDeleteCommandHandler : IRequestHandler<UserDeleteCommand, bool>
 {
     private readonly IAppDbContext _context;
 
-    public UserDeleteCommandHandler(IAppDbContext context, IMapper mapper)
+    public UserDeleteCommandHandler(IAppDbContext context)
     {
         _context = context;
     }
@@ -20,7 +20,7 @@ public class UserDeleteCommandHandler : IRequestHandler<UserDeleteCommand, bool>
             return false;
 
         var categories = await _context.Users
-            .FirstOrDefaultAsync(x => x.Id == request.Id);
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (categories == null)
             return false;
