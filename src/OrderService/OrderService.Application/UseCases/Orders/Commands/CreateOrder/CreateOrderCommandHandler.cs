@@ -26,7 +26,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, boo
             entity.CreatedAt = DateTime.UtcNow;
             entity.UpdatedAt = DateTime.UtcNow;
 
-            await _context.Orders.AddAsync(entity);
+            await _context.Orders.AddAsync(entity, cancellationToken);
 
             var result = await _context
                 .SaveChangesAsync(cancellationToken);
