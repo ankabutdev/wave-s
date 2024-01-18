@@ -17,6 +17,7 @@ public class CategoriesController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
+
     public CategoriesController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
@@ -26,6 +27,7 @@ public class CategoriesController : ControllerBase
     [HttpGet]
     public async ValueTask<IActionResult> GetAllAsync()
     {
+        //Console.WriteLine(HttpContext.Request.Host.Value);
         return Ok(await _mediator.Send(new GetAllCategoryQuery()));
     }
 

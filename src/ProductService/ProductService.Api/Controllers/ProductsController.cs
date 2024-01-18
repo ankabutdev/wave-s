@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Application.DTOs;
 using ProductService.Application.DTOs.Products;
 using ProductService.Application.UseCases.Products.Commands.CreateProduct;
 using ProductService.Application.UseCases.Products.Commands.DeleteProduct;
 using ProductService.Application.UseCases.Products.Commands.UpdateProduct;
 using ProductService.Application.UseCases.Products.Queries.GetAllProduct;
 using ProductService.Application.UseCases.Products.Queries.GetByIdProduct;
+using ProductService.Application.UseCases.Products.Queries.GetProductByCategoryId;
+using ProductService.Application.UseCases.Products.Queries.GetProductByCompanyId;
 
 namespace ProductService.Api.Controllers;
 
@@ -28,6 +29,22 @@ public class ProductsController : ControllerBase
     public async ValueTask<IActionResult> GetAllAsync()
     {
         return Ok(await _mediator.Send(new GetAllProductQuery()));
+    }
+
+    [HttpGet("categories/{categoryId}")]
+    public async ValueTask<IActionResult> GetProductsByCategoryId(int categoryId)
+    {
+        return Ok(await _mediator
+            .Send(new GetProductByCategoryIdQuery()
+            { CategoryId = categoryId }));
+    }
+
+    [HttpGet("companies/{companyId}")]
+    public async ValueTask<IActionResult> GetProductsByCompanyId(int companyId)
+    {
+        return Ok(await _mediator
+            .Send(new GetProductByCompanyIdQuery()
+            { CompanyId = companyId }));
     }
 
     [HttpGet("{Id}")]
@@ -67,10 +84,10 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("file")]
-    public async Task<IActionResult> Create([FromForm] FIleDto fileDto)
-    {
-        fileDto.ImagePaths.ForEach(x=> Console.WriteLine(x.FileName));
-        return Ok(fileDto.ImagePaths);
-    }
+    //[HttpPost("file")]
+    //public async Task<IActionResult> CreateAsync([FromForm] FIleDto fileDto)
+    //{
+    //    fileDto.ImagePaths.ForEach(x=> Console.WriteLine(x.FileName));
+    //    return Ok(fileDto.ImagePaths);
+    //}
 }
