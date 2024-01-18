@@ -8,7 +8,7 @@ public class Product
 
     public string Name { get; set; } = null!;
 
-    public string ImagePaths { get; set; } = null!;
+    public string ImagePath { get; set; } = null!;
 
     public double Price { get; set; }
 
