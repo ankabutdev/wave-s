@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Abstractions;
 using ProductService.Application.Interfaces.Files;
-using ProductService.Domain.Entities;
 
 namespace ProductService.Application.UseCases.Products.Commands.DeleteProduct;
 
@@ -31,8 +30,14 @@ public class ProductDeleteCommandHandler : IRequestHandler<ProductDeleteCommand,
         if (products is null)
             return false;
 
-        // Deleted Images
-        await RemoveImages(products);
+        var imageResult = await _fileService
+            .DeleteImageAsync(products.ImagePath);
+
+        if (imageResult == false)
+            throw new Exception("Image fot found!");
+
+        //// Deleted Images
+        //await RemoveImages(products);
 
         // Delete Product
         _context.Products.Remove(products);
@@ -44,17 +49,17 @@ public class ProductDeleteCommandHandler : IRequestHandler<ProductDeleteCommand,
         return result > 0;
     }
 
-    private async Task RemoveImages(Product products)
-    {
-        var countResult = 0;
+    //private async Task RemoveImages(Product products)
+    //{
+    //    var countResult = 0;
 
-        foreach (var path in products.ImagePaths.Split("&"))
-        {
-            await _fileService.DeleteImageAsync(path);
-            countResult++;
-        }
+    //    foreach (var path in products.ImagePaths.Split("&"))
+    //    {
+    //        await _fileService.DeleteImageAsync(path);
+    //        countResult++;
+    //    }
 
-        if (countResult < 1)
-            throw new Exception("Image fot found!");
-    }
+    //    if (countResult < 1)
+    //        throw new Exception("Image fot found!");
+    //}
 }
