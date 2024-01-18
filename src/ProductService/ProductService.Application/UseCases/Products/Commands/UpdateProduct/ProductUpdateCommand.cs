@@ -11,7 +11,7 @@ public class ProductUpdateCommand : IRequest<bool>
 
     public string Name { get; set; } = null!;
 
-    public IList<IFormFile>? ImagePaths { get; set; }
+    public IFormFile? ImagePath { get; set; }
 
     public double Price { get; set; }
 
