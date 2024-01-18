@@ -18,7 +18,7 @@ public class GetAllCategoryQueryHandler : IRequestHandler<GetAllCategoryQuery, I
     {
         return await _context
             .Categories
-            //.Include(x => x.Products)
+            .Include(x => x.Products)
             .ToListAsync(cancellationToken);
     }
 }

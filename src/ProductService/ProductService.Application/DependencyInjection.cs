@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using ProductService.Application.Interfaces.Files;
 using ProductService.Application.Mappers;
@@ -14,6 +15,8 @@ public static class DependencyInjection
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(typeof(MappingConfiguration));
         services.AddScoped<IFileService, FileService>();
+        services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddHttpContextAccessor();
         return services;
     }
 }

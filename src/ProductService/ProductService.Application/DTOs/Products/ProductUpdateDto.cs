@@ -12,7 +12,7 @@ public class ProductUpdateDto
 
     public string Name { get; set; } = null!;
 
-    public IFormFile? ImagePaths { get; set; }
+    public IFormFile? ImagePath { get; set; }
 
     public double Price { get; set; }
 

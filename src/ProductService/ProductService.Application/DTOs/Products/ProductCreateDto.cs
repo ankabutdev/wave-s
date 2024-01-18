@@ -8,7 +8,9 @@ public class ProductCreateDto
 
     public string Name { get; set; } = null!;
 
-    public List<IFormFile>? ImagePaths { get; set; }
+    //public List<IFormFile>? ImagePaths { get; set; }
+
+    public IFormFile ImagePath { get; set; } = default!;
 
     public double Price { get; set; }
 

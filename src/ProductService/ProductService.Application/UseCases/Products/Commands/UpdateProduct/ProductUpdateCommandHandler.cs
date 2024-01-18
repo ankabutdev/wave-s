@@ -3,8 +3,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Abstractions;
 using ProductService.Application.Interfaces.Files;
-using ProductService.Domain.Entities;
-using System.Text;
 
 namespace ProductService.Application.UseCases.Products.Commands.UpdateProduct;
 
@@ -25,24 +23,26 @@ public class ProductUpdateCommandHandler : IRequestHandler<ProductUpdateCommand,
     {
         try
         {
-            var products = await _context.Products
+            var product = await _context.Products
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-            if (products is null)
-                throw new ArgumentNullException(nameof(products));
+            if (product is null)
+                throw new ArgumentNullException(nameof(product));
 
-            if (request.ImagePaths is not null)
+            if (request.ImagePath is not null)
             {
-                await DeleteImages(products);
+                var deleteImage = await _fileService.DeleteImageAsync(product.ImagePath);
 
-                products.ImagePaths = await UplaodImages(request);
+                string newImagePath = await _fileService.UploadImageAsync(request.ImagePath);
+
+                product.ImagePath = newImagePath;
             }
 
-            _mapper.Map(request, products);
+            _mapper.Map(request, product);
 
-            products.UpdatedAt = DateTime.UtcNow;
+            product.UpdatedAt = DateTime.UtcNow;
 
-            _context.Products.Update(products);
+            _context.Products.Update(product);
 
             var result = await _context
                 .SaveChangesAsync(cancellationToken);
@@ -55,24 +55,24 @@ public class ProductUpdateCommandHandler : IRequestHandler<ProductUpdateCommand,
         }
     }
 
-    private async Task DeleteImages(Product products)
-    {
-        foreach (var image in products.ImagePaths.Split("&"))
-        {
-            await _fileService.DeleteImageAsync(image);
-        }
-    }
+    //private async Task DeleteImages(Product products)
+    //{
+    //    foreach (var image in products.ImagePaths.Split("&"))
+    //    {
+    //        await _fileService.DeleteImageAsync(image);
+    //    }
+    //}
 
-    private async Task<string> UplaodImages(ProductUpdateCommand products)
-    {
-        var imagePaths = new StringBuilder();
+    //private async Task<string> UplaodImages(ProductUpdateCommand products)
+    //{
+    //    var imagePaths = new StringBuilder();
 
-        foreach (var image in products.ImagePaths!)
-        {
-            string imagePath = await _fileService.UploadImageAsync(image);
-            imagePaths.Append(imagePath + "&");
-        }
+    //    foreach (var image in products.ImagePaths!)
+    //    {
+    //        string imagePath = await _fileService.UploadImageAsync(image);
+    //        imagePaths.Append(imagePath + "&");
+    //    }
 
-        return imagePaths.ToString();
-    }
+    //    return imagePaths.ToString();
+    //}
 }
