@@ -18,6 +18,12 @@ var app = builder.Build();
 
 // app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseCors(options =>
+{
+    options.AllowAnyMethod();
+    options.AllowAnyOrigin();
+    options.AllowAnyHeader();
+});
 app.UseAuthorization();
 await app.UseOcelot();
 app.MapControllers();
