@@ -21,6 +21,7 @@ public class GetAllCompanyQueryHandler : IRequestHandler<GetAllCompanyQuery, IEn
     {
         return await _context
             .Companies
+            .Include(x => x.Products)
             .ToListAsync(cancellationToken);
     }
 }

@@ -17,6 +17,7 @@ public class GetByIdCompanyQueryHandler : IRequestHandler<GetByIdCompanyQuery, C
     public async Task<Company> Handle(GetByIdCompanyQuery request, CancellationToken cancellationToken)
     {
         var result = await _context.Companies
+            .Include(x => x.Products)
             .FirstOrDefaultAsync(x => x.Id == request.Id);
 
         return result ?? throw new Exception("Company not found!");
