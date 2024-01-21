@@ -25,6 +25,7 @@ app.UseCors(options =>
     options.AllowAnyHeader();
 });
 app.UseAuthorization();
+app.UseStaticFiles();
 await app.UseOcelot();
 app.MapControllers();
 app.Run();
