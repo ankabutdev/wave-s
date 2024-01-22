@@ -99,6 +99,19 @@
       "UpstreamPathTemplate": "/users",
       "UpstreamHttpMethod": [ "GET", "POST" ]
     }
+    //// MEDIA
+    //{
+    //  "DownstreamPathTemplate": "/media/images/{any}",
+    //  "DownstreamScheme": "http",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 5120
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "/media/images/{any}",
+    //  "UpstreamHttpMethod": [ "GET" ]
+    //}
   ],
    "GlobalConfiguration": {
    "BaseUrl": "https://localhost:9999"
