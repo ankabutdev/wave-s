@@ -98,7 +98,7 @@
       ],
       "UpstreamPathTemplate": "/users",
       "UpstreamHttpMethod": [ "GET", "POST" ]
-    },
+    }
     //// MEDIA
     //{
     //  "DownstreamPathTemplate": "/media/images/{any}",
