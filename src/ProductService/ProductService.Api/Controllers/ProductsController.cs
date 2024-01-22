@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using ProductService.Application.DTOs.Products;
 using ProductService.Application.UseCases.Products.Commands.CreateProduct;
 using ProductService.Application.UseCases.Products.Commands.DeleteProduct;
@@ -9,8 +10,11 @@ using ProductService.Application.UseCases.Products.Queries.GetAllProduct;
 using ProductService.Application.UseCases.Products.Queries.GetByIdProduct;
 using ProductService.Application.UseCases.Products.Queries.GetProductByCategoryId;
 using ProductService.Application.UseCases.Products.Queries.GetProductByCompanyId;
+using ProductService.Domain.Entities;
 
 namespace ProductService.Api.Controllers;
+
+#pragma warning disable
 
 [Route("api/products/")]
 [ApiController]
@@ -18,17 +22,37 @@ public class ProductsController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
+    private readonly IMemoryCache _cache;
 
-    public ProductsController(IMediator mediator, IMapper mapper)
+    public ProductsController(IMediator mediator, IMapper mapper,
+        IMemoryCache memoryCache)
     {
         _mediator = mediator;
         _mapper = mapper;
+        _cache = memoryCache;
     }
 
     [HttpGet]
     public async ValueTask<IActionResult> GetAllAsync()
     {
-        return Ok(await _mediator.Send(new GetAllProductQuery()));
+        if (_cache.TryGetValue("AllProducts", out var cachedData))
+        {
+            IEnumerable<Product>? product = (IEnumerable<Product>)cachedData;
+            Console.WriteLine("GET DATA CACHE MEMORY");
+            return Ok(product);
+        }
+
+        var result = await _mediator.Send(new GetAllProductQuery());
+
+        var cacheEntryOptions = new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1),
+            SlidingExpiration = TimeSpan.FromSeconds(20)
+        };
+
+        _cache.Set("AllProducts", result, cacheEntryOptions);
+
+        return Ok(result);
     }
 
     [HttpGet("categories/{categoryId}")]
