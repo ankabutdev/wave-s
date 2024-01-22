@@ -1,13 +1,9 @@
 ﻿namespace Gateway.Api;
 
-public class BackGroundMicroService : BackgroundService, IHostedService, IHostedLifecycleService
+public class BackGroundMicroService(ILogger<BackGroundMicroService> logger) 
+    : BackgroundService, IHostedService, IHostedLifecycleService
 {
-    private readonly ILogger<BackGroundMicroService> _logger;
-
-    public BackGroundMicroService(ILogger<BackGroundMicroService> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<BackGroundMicroService> _logger = logger;
 
     public Task StartedAsync(CancellationToken cancellationToken)
     {
