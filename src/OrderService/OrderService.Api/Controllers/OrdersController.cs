@@ -1,14 +1,18 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using OrderService.Application.DTOs.Orders;
 using OrderService.Application.UseCases.Orders.Commands.CreateOrder;
 using OrderService.Application.UseCases.Orders.Commands.DeleteOrder;
 using OrderService.Application.UseCases.Orders.Commands.UpdateOrder;
 using OrderService.Application.UseCases.Orders.Queries.GetAllOrder;
 using OrderService.Application.UseCases.Orders.Queries.GetByIdOrder;
+using OrderService.Domain.Entities;
 
 namespace OrderService.Api.Controllers;
+
+#pragma warning disable
 
 [Route("api/orders")]
 [ApiController]
@@ -16,17 +20,37 @@ public class OrdersController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
+    private readonly IMemoryCache _cache;
 
-    public OrdersController(IMediator mediator, IMapper mapper)
+    public OrdersController(IMediator mediator, IMapper mapper,
+        IMemoryCache cache)
     {
         _mediator = mediator;
         _mapper = mapper;
+        _cache = cache;
     }
 
     [HttpGet]
     public async ValueTask<IActionResult> GetAllAsync()
     {
-        return Ok(await _mediator.Send(new GetAllOrderQuery()));
+        if (_cache.TryGetValue("AllOrders", out var cachedData))
+        {
+            IEnumerable<Order>? product = (IEnumerable<Order>)cachedData;
+            Console.WriteLine("GET DATA CACHE MEMORY");
+            return Ok(product);
+        }
+
+        var result = await _mediator.Send(new GetAllOrderQuery());
+
+        var cacheEntryOptions = new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1),
+            SlidingExpiration = TimeSpan.FromSeconds(20)
+        };
+
+        _cache.Set("AllOrders", result, cacheEntryOptions);
+
+        return Ok(result);
     }
 
     [HttpGet("{Id}")]
