@@ -1,3 +1,4 @@
+using Gateway.Api;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -11,6 +12,8 @@ builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("ocelot.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
+
+builder.Services.AddHostedService<BackGroundMicroService>();
 
 builder.Services.AddOcelot(builder.Configuration);
 
