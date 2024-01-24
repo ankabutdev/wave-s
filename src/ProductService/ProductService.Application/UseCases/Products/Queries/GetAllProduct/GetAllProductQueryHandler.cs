@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Abstractions;
 using ProductService.Domain.Entities;
@@ -19,8 +18,10 @@ public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQuery, IEn
     {
         return await _context
             .Products
-            .Include(x => x.Category)
-            //.ThenInclude(y => y.Products)
-            .ToListAsync(cancellationToken);
+            .AsNoTracking()
+            .ToListAsync();
+        //.Include(x => x.Category)
+        //.ThenInclude(y => y.Products)
+        //.ToListAsync(cancellationToken);
     }
 }
