@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using ProductService.Application;
 using ProductService.Infastructure;
 
