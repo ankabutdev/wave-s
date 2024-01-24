@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\media\images\" />
+    <Folder Include="wwwroot\logging\" />
   </ItemGroup>
 
 </Project>
