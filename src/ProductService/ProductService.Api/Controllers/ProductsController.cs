@@ -10,6 +10,7 @@ using ProductService.Application.UseCases.Products.Queries.GetAllProduct;
 using ProductService.Application.UseCases.Products.Queries.GetByIdProduct;
 using ProductService.Application.UseCases.Products.Queries.GetProductByCategoryId;
 using ProductService.Application.UseCases.Products.Queries.GetProductByCompanyId;
+using ProductService.Domain.Entities;
 
 namespace ProductService.Api.Controllers;
 
@@ -39,40 +40,27 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public async ValueTask<IActionResult> GetAllAsync()
     {
-        try
+        //var result = await _mediator.Send(new GetAllProductQuery());
+        //return Ok(result);
+
+        if (_cache.TryGetValue("AllProducts", out var cachedData))
         {
-            var result = await _mediator.Send(new GetAllProductQuery());
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            var subPath = Path.Combine(ROOTHPATH, "logging");
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(subPath, "WriteLines.txt")))
-            {
-                outputFile.WriteLine(ex.Message + "\n");
-            }
-            return StatusCode(500, "Internal Server Error");
+            IEnumerable<Product>? product = (IEnumerable<Product>)cachedData;
+            Console.WriteLine("GET DATA CACHE MEMORY");
+            return Ok(product);
         }
 
+        var result = await _mediator.Send(new GetAllProductQuery());
 
-        //if (_cache.TryGetValue("AllProducts", out var cachedData))
-        //{
-        //    IEnumerable<Product>? product = (IEnumerable<Product>)cachedData;
-        //    Console.WriteLine("GET DATA CACHE MEMORY");
-        //    return Ok(product);
-        //}
+        var cacheEntryOptions = new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1),
+            SlidingExpiration = TimeSpan.FromSeconds(20)
+        };
 
-        // var result = await _mediator.Send(new GetAllProductQuery());
+        _cache.Set("AllProducts", result, cacheEntryOptions);
 
-        //var cacheEntryOptions = new MemoryCacheEntryOptions
-        //{
-        //    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1),
-        //    SlidingExpiration = TimeSpan.FromSeconds(20)
-        //};
-
-        //_cache.Set("AllProducts", result, cacheEntryOptions);
-
-        // return Ok(result);
+        return Ok(result);
     }
 
     [HttpGet("categories/{categoryId}")]
