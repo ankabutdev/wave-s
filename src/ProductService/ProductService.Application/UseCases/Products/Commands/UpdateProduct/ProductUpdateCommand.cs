@@ -19,8 +19,6 @@ public class ProductUpdateCommand : IRequest<bool>
 
     public int CompanyId { get; set; }
 
-    public DateTime CreatedAt { get; set; }
-
     public DateTime UpdatedAt { get; set; }
 
     public string Frame { get; set; } = null!;

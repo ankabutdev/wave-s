@@ -27,15 +27,19 @@ public class ProductUpdateCommandHandler : IRequestHandler<ProductUpdateCommand,
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (product is null)
-                throw new ArgumentNullException(nameof(product));
+                throw new Exception("Product Not Found");
 
             if (request.ImagePath is not null)
             {
                 var deleteImage = await _fileService.DeleteImageAsync(product.ImagePath);
+                if (deleteImage)
+                {
+                    string newImagePath = await _fileService.UploadImageAsync(request.ImagePath);
 
-                string newImagePath = await _fileService.UploadImageAsync(request.ImagePath);
-
-                product.ImagePath = newImagePath;
+                    product.ImagePath = newImagePath;
+                }
+                else
+                    throw new Exception("Image not Found");
             }
 
             _mapper.Map(request, product);

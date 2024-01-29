@@ -41,4 +41,5 @@ public class ProductUpdateDto
     public string Smartpause { get; set; } = null!;
 
     public string Turbopressure { get; set; } = null!;
+
 }

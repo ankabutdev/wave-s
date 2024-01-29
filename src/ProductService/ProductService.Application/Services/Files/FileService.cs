@@ -19,7 +19,6 @@ public class FileService : IFileService
     public async Task<bool> DeleteImageAsync(string subpath)
     {
         string path = Path.Combine(ROOTPATH, subpath);
-
         if (File.Exists(path))
         {
             await Task.Run(() =>
@@ -28,7 +27,7 @@ public class FileService : IFileService
             });
             return true;
         }
-        return false;
+        else return false;
     }
 
     public async Task<string> UploadImageAsync(IFormFile image)
