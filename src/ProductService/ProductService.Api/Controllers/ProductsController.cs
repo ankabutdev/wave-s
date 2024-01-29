@@ -9,6 +9,7 @@ using ProductService.Application.UseCases.Products.Commands.UpdateProduct;
 using ProductService.Application.UseCases.Products.Queries.GetAllProduct;
 using ProductService.Application.UseCases.Products.Queries.GetByIdProduct;
 using ProductService.Application.UseCases.Products.Queries.GetProductByCategoryId;
+using ProductService.Application.UseCases.Products.Queries.GetProductByCategoryName;
 using ProductService.Application.UseCases.Products.Queries.GetProductByCompanyId;
 using ProductService.Domain.Entities;
 
@@ -63,12 +64,23 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("categories/{categoryId}")]
-    public async ValueTask<IActionResult> GetProductsByCategoryId(int categoryId)
+    [HttpGet("categories/name/{categoryName}")]
+    public async Task<IActionResult> GetProductsByCategoryNameAsync(string categoryName)
     {
-        return Ok(await _mediator
-            .Send(new GetProductByCategoryIdQuery()
-            { CategoryId = categoryId }));
+        var result = await _mediator.Send(new GetProductByCategoryNameQuery()
+        {
+            CategoryName = categoryName
+        });
+        return Ok(result);
+    }
+
+    [HttpGet("categories/id/{categoryId}")]
+    public async Task<IActionResult> GetProductsByCategoryId(int categoryId)
+    {
+        return Ok(await _mediator.Send(new GetProductByCategoryIdQuery()
+        {
+            CategoryId = categoryId
+        }));
     }
 
     [HttpGet("companies/{companyId}")]
