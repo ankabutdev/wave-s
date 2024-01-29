@@ -76,7 +76,7 @@
       "UpstreamHttpMethod": [ "GET", "POST" ]
     },
     {
-      "DownstreamPathTemplate": "/api/products/categories/{categoryId}",
+      "DownstreamPathTemplate": "/api/products/categories/id/{categoryId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -84,7 +84,19 @@
           "Port": 5120
         }
       ],
-      "UpstreamPathTemplate": "/products/categories/{categoryId}",
+      "UpstreamPathTemplate": "/products/categories/id/{categoryId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/products/categories/name/{categoryName}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5120
+        }
+      ],
+      "UpstreamPathTemplate": "/products/categories/name/{categoryName}",
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
