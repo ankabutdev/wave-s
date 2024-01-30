@@ -5,5 +5,5 @@ namespace ProductService.Application.UseCases.Products.Queries.GetProductByCateg
 
 public class GetProductByCategoryNameQuery : IRequest<IQueryable<Product>>
 {
-    public string? CategoryName { get; set; }
+    public string CategoryName { get; set; } = string.Empty;
 }
