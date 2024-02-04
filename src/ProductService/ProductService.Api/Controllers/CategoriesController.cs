@@ -34,7 +34,7 @@ public class CategoriesController : ControllerBase
     [HttpGet]
     public async ValueTask<IActionResult> GetAllAsync()
     {
-        //Console.WriteLine(HttpContext.Request.Host.Value);
+        // Console.WriteLine(HttpContext.Request.Host.Value);
 
         if (_cache.TryGetValue("AllCategories", out var cachedData))
         {
@@ -79,8 +79,11 @@ public class CategoriesController : ControllerBase
     public async Task<IActionResult> UpdateAsync(int Id, CategoryUpdateDto dto)
     {
         var category = _mapper.Map<CategoryUpdateCommand>(dto);
+
         category.Id = Id;
+
         var result = await _mediator.Send(category);
+
         return Ok(result);
     }
 
