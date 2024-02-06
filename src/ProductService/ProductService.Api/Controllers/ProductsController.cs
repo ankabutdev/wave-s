@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using ProductService.Application.Common.Utils;
 using ProductService.Application.DTOs.Products;
 using ProductService.Application.UseCases.Products.Commands.CreateProduct;
 using ProductService.Application.UseCases.Products.Commands.DeleteProduct;
@@ -26,6 +27,7 @@ public class ProductsController : ControllerBase
     private readonly IMemoryCache _cache;
     private readonly ILogger _logger;
     private readonly IWebHostEnvironment _env;
+    private readonly int _maxPageSize = 9;
 
     private readonly string ROOTHPATH;
 
@@ -39,7 +41,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async ValueTask<IActionResult> GetAllAsync()
+    public async ValueTask<IActionResult> GetAllAsync([FromQuery] int page = 1)
     {
         //var result = await _mediator.Send(new GetAllProductQuery());
         //return Ok(result);
@@ -51,7 +53,11 @@ public class ProductsController : ControllerBase
             return Ok(product);
         }
 
-        var result = await _mediator.Send(new GetAllProductQuery());
+        var result = await _mediator
+            .Send(new GetAllProductQuery()
+            {
+                @params = new PaginationParams(page, _maxPageSize)
+            });
 
         var cacheEntryOptions = new MemoryCacheEntryOptions
         {
@@ -65,22 +71,27 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("categories/name/{categoryName}")]
-    public async Task<IActionResult> GetProductsByCategoryNameAsync(string categoryName)
+    public async Task<IActionResult> GetProductsByCategoryNameAsync(string categoryName, [FromQuery] int page = 1)
     {
-        var result = await _mediator.Send(new GetProductByCategoryNameQuery()
-        {
-            CategoryName = categoryName
-        });
+        var result = await _mediator.Send(
+            new GetProductByCategoryNameQuery()
+            {
+                CategoryName = categoryName,
+                @params = new PaginationParams(page, _maxPageSize)
+            });
+
         return Ok(result);
     }
 
     [HttpGet("categories/id/{categoryId}")]
-    public async Task<IActionResult> GetProductsByCategoryId(int categoryId)
+    public async Task<IActionResult> GetProductsByCategoryId(int categoryId, [FromQuery] int page = 1)
     {
-        return Ok(await _mediator.Send(new GetProductByCategoryIdQuery()
-        {
-            CategoryId = categoryId
-        }));
+        return Ok(await _mediator
+            .Send(new GetProductByCategoryIdQuery()
+            {
+                CategoryId = categoryId,
+                @params = new PaginationParams(page, _maxPageSize)
+            }));
     }
 
     [HttpGet("companies/{companyId}")]
