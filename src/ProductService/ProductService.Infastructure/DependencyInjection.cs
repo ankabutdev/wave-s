@@ -18,6 +18,7 @@ public static class DependencyInjection
         services.AddDbContext<IAppDbContext, AppDbContext>(options =>
         {
             options.UseNpgsql(defaultConnection);
+
         });
 
         services.AddControllersWithViews()

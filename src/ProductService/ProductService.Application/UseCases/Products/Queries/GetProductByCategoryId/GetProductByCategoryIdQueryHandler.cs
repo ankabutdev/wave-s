@@ -17,6 +17,11 @@ public class GetProductByCategoryIdQueryHandler : IRequestHandler<GetProductByCa
 
     public async Task<IQueryable<Product>> Handle(GetProductByCategoryIdQuery request, CancellationToken cancellationToken)
     {
-        return _context.Products.Where(x => x.CategoryId == request.CategoryId);
+        return _context.Products
+            .Where(x => x.CategoryId == request.CategoryId)
+            .Skip(request.@params
+            .GetSkipCount())
+            .Take(request
+            .@params.PageSize);
     }
 }
