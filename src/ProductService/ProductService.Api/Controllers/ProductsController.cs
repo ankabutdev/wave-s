@@ -45,13 +45,13 @@ public class ProductsController : ControllerBase
     {
         //var result = await _mediator.Send(new GetAllProductQuery());
         //return Ok(result);
-
-        if (_cache.TryGetValue("AllProducts", out var cachedData))
-        {
-            IEnumerable<Product>? product = (IEnumerable<Product>)cachedData;
-            Console.WriteLine("GET DATA CACHE MEMORY");
-            return Ok(product);
-        }
+        
+        //if (_cache.TryGetValue("AllProducts", out var cachedData) && page is 1)
+        //{
+        //    IEnumerable<Product>? product = (IEnumerable<Product>)cachedData;
+        //    Console.WriteLine("GET DATA CACHE MEMORY");
+        //    return Ok(product);
+        //}
 
         var result = await _mediator
             .Send(new GetAllProductQuery()
@@ -59,13 +59,13 @@ public class ProductsController : ControllerBase
                 @params = new PaginationParams(page, _maxPageSize)
             });
 
-        var cacheEntryOptions = new MemoryCacheEntryOptions
-        {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1),
-            SlidingExpiration = TimeSpan.FromSeconds(20)
-        };
+        //var cacheEntryOptions = new MemoryCacheEntryOptions
+        //{
+        //    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1),
+        //    SlidingExpiration = TimeSpan.FromSeconds(20)
+        //};
 
-        _cache.Set("AllProducts", result, cacheEntryOptions);
+        //_cache.Set("AllProducts", result, cacheEntryOptions);
 
         return Ok(result);
     }
