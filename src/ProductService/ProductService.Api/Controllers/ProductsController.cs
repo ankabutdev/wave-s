@@ -12,7 +12,7 @@ using ProductService.Application.UseCases.Products.Queries.GetByIdProduct;
 using ProductService.Application.UseCases.Products.Queries.GetProductByCategoryId;
 using ProductService.Application.UseCases.Products.Queries.GetProductByCategoryName;
 using ProductService.Application.UseCases.Products.Queries.GetProductByCompanyId;
-using ProductService.Domain.Entities;
+using ProductService.Application.UseCases.Products.Queries.GetProductCount;
 
 namespace ProductService.Api.Controllers;
 
@@ -45,7 +45,7 @@ public class ProductsController : ControllerBase
     {
         //var result = await _mediator.Send(new GetAllProductQuery());
         //return Ok(result);
-        
+
         //if (_cache.TryGetValue("AllProducts", out var cachedData) && page is 1)
         //{
         //    IEnumerable<Product>? product = (IEnumerable<Product>)cachedData;
@@ -66,6 +66,15 @@ public class ProductsController : ControllerBase
         //};
 
         //_cache.Set("AllProducts", result, cacheEntryOptions);
+
+        return Ok(result);
+    }
+
+    [HttpGet("count")]
+    public async Task<IActionResult> CountAsync()
+    {
+        var result = await _mediator
+            .Send(new GetProudctCountQuery());
 
         return Ok(result);
     }
