@@ -19,7 +19,6 @@ builder.Services.AddOcelot(builder.Configuration);
 
 var app = builder.Build();
 
-// app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseCors(options =>
 {
@@ -27,6 +26,7 @@ app.UseCors(options =>
     options.AllowAnyOrigin();
     options.AllowAnyHeader();
 });
+
 app.UseAuthorization();
 app.UseStaticFiles();
 await app.UseOcelot();
