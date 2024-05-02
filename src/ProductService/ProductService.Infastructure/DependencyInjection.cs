@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProductService.Application.Abstractions;
 using ProductService.Infastructure.Persistence;
 using System.Text.Json.Serialization;
 
@@ -15,10 +14,9 @@ public static class DependencyInjection
         var dockerConnection = configuration.GetConnectionString("DockerConnection");
         var defaultConnection = configuration.GetConnectionString("DefaultConnection");
 
-        services.AddDbContext<IAppDbContext, AppDbContext>(options =>
+        services.AddDbContext<AppDbContext>(options =>
         {
             options.UseNpgsql(defaultConnection);
-
         });
 
         services.AddControllersWithViews()
